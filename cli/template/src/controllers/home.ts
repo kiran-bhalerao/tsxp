@@ -7,6 +7,6 @@ export class Home {
 
   @Get("/")
   async home(_req: Request, res: Response) {
-    return res.send("Welcome home!");
+    return res.send("Welcome to TSXP!");
   }
 }

@@ -32,6 +32,17 @@ class Cli extends Command {
       }
     );
 
+    // issue with .gitignore file
+    // See: https://github.com/npm/npm/issues/1862
+    const gitignoreExists = fs.existsSync(path.join(projectPath, ".gitignore"));
+
+    if (!gitignoreExists) {
+      fs.moveSync(
+        path.join(projectPath, "gitignore"),
+        path.join(projectPath, ".gitignore")
+      );
+    }
+
     // rename project name in package.json
     const rawPkg = fs.readFileSync(
       path.resolve(projectPath, "./package.json"),
@@ -77,8 +88,10 @@ class Cli extends Command {
 
       const cmd = await getInstallCmd();
       await execa(cmd, getInstallArgs(cmd));
+
       installSpinner.succeed("Installed dependencies");
     } catch (e) {
+      console.log(e);
       installSpinner.fail("Failed to install dependencies");
       process.exit(1);
     }

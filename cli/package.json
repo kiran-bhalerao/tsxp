@@ -1,6 +1,6 @@
 {
   "name": "@tsxp/cli",
-  "version": "0.0.14",
+  "version": "0.0.21",
   "author": "Kiran bhalerao",
   "bin": {
     "cli": "./bin/run"

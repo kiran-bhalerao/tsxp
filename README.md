@@ -1,8 +1,7 @@
 <h1 align="center">Welcome to tsxp 👋</h1>
 
-TSXP is a typescript express.js framework with class based controller approach
-
-### 🏠 [Homepage](https://github.com/CallbacKiran/tsxp)
+TSXP is a Typescript Express.js minimal web framwork with CLI to scaffold bacis project. Write scalable
+Backend App with Power of Typescript and Simplicity of Express.js ⚡
 
 ## Install
 

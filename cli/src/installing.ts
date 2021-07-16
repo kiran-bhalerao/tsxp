@@ -7,7 +7,7 @@ export const installing = function (packages: string[]) {
     })
     .join("\n");
 
-  return `Installing npm modules:
+  return `Installing npm modules, This might take a couple of minutes:
 ${pkgText}
 `;
 };

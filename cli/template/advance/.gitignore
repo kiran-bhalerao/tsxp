@@ -1,0 +1,20 @@
+# dependencies
+/node_modules
+
+# production
+/build
+/dist
+
+
+# misc
+.DS_Store
+.env
+.env.*
+*.env
+*.Identifier
+
+package.lock.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+

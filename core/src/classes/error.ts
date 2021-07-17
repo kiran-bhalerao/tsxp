@@ -1,4 +1,4 @@
-abstract class ErrorExtender<T = string> extends Error {
+export abstract class ErrorExtender<T = string> extends Error {
   statusCode: number;
   errors: T[];
 
@@ -21,10 +21,7 @@ abstract class ErrorExtender<T = string> extends Error {
  * throw new CustomError("Login credentials are wrong❗", 403)
  * ```
  */
-export class CustomError extends Error {
-  statusCode: number;
-  errors: string[];
-
+export class CustomError extends ErrorExtender {
   /**
    * @description
    * **CustomError class** is good to handle error message, but it is not a generic it supports only **string | string[]** type of errors \
@@ -44,11 +41,4 @@ export class CustomError extends Error {
    * ```
    */
   static extender = ErrorExtender;
-
-  constructor(message: string | string[], code?: number) {
-    super("Bad Request");
-
-    this.errors = Array.isArray(message) ? message : [message];
-    this.statusCode = code || 400;
-  }
 }

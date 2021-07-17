@@ -39,7 +39,6 @@ function removeParamPipes(path: string | RegExp) {
   return path;
 }
 
-// "/a/:num|number"
 function detectTypeWithPipe(path: string | RegExp) {
   const params: { param: string; typ: PipeType }[] = [];
 

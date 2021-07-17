@@ -8,6 +8,9 @@ type U = any;
 interface AuthType<T extends string> {
   role?: T | T[];
   error?: string;
+  /**
+   * @desc checkout Auth.extender abstract class
+   */
   extends?: AuthExtender<T>;
 }
 
@@ -31,7 +34,28 @@ const defaultAuthChecker = (
 };
 
 /**
- * 🔒 Method must be async route handler
+ * @description
+ * This decorator providers **Authentication** and **Authorization** features \
+ * Before using this you need to setup **context**(optional) in App class \
+ * or if you are using(planing to use) any third party Authentication lib. like passport.js \
+ * make sure the third party lib. set **user** object in req like **req.user**
+ *
+ * for authorization there are certain condition needs to met
+ * - you need to pass role option to Auth decorator
+ * - by default Auth decorator checks user role by req.user.userType field
+ * - but you can customize this behavior (Auth provider Auth.extender abstract class)
+ *
+ * @example
+ * ```
+ * ＠Auth() // use this if you only need authentication
+ * ＠Auth({role: 'ADMIN'}) // authorization
+ * ＠Auth({extends: new MyAuthExt({role: '..'}) }) // with custom auth class (extended from Auth.extender)
+ *
+ * // or with custom auth class(in this case MyAuthExt) you can create custom decorator
+ * const MyAuth = new MyAuthExt().createDecorator()
+ * ＠MyAuth({role: '..'})
+ * ```
+ * @note Method must be async route handler
  * @note use before `@Middlewares` decorator so the middlewares will be auth protected
  */
 export function Auth<T extends string>(props?: AuthType<T>) {
@@ -91,6 +115,29 @@ abstract class AuthExtender<T extends string> {
     currentRole?: string
   ) {
     return defaultAuthChecker(req, acceptedRole, currentRole);
+  }
+
+  /**
+   * @description with this you can create custom auth decorator
+   * @example
+   * ```
+   * class MyAuthExt extends Auth.extender<ROLES> {
+   *   // override Auth methods
+   * }
+   * const MyAuth = new MyAuthExt().createDecorator()
+   *
+   * // now you can use this MyAuth as Decorator
+   *  ＠MyAuth()
+   *  ＠Get()
+   *  async handler(req: Request, req: Response) {
+   *   ...
+   *  }
+   * ```
+   */
+  public createDecorator() {
+    return (props?: Omit<AuthType<T>, "extends">) => {
+      return Auth<T>({ ...props, extends: this });
+    };
   }
 
   constructor(public props?: { role: T | T[]; error?: string }) {}

@@ -13,7 +13,7 @@ Backend App with Power of Typescript and Simplicity of Express.js ⚡
 
 # The problem
 
-I have seen lots of backend project(specially expressjs/nodejs) they start very well but as they grow and grow maintaining them is quite cumbersome.
+I have seen lots of backend projects(specially expressjs/nodejs) they start very well but as they grow and grow maintaining them is quite cumbersome.
 
 # The solution
 

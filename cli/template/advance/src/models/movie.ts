@@ -4,7 +4,7 @@
 // for mongo checkout `Typegoose`
 // for sql checkout `TypeORM`
 
-export const Movie = {
+export const MovieModel = {
   find(id: string) {
     return {
       id,

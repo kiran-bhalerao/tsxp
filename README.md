@@ -24,7 +24,7 @@ so i started working on @tsxp
 
 # suggestion
 
-@tsxp is a fun project. it is meant for simple/small scale application, if you think your application will grow to the sky i'll recommend you to go with [Nest.js](https://nestjs.com/). Next.js has a great community support & experienced maintainer.
+@tsxp is a fun project. it is meant for simple/small scale application, if you think your application will grow to the sky i'll recommend you to go with [Nest.js](https://nestjs.com/). Nest.js has a great community support & experienced maintainer.
 
 # Install
 

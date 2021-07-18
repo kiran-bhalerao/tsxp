@@ -18,7 +18,7 @@ I have seen a lots of backend project(specially expressjs/nodejs) they start ver
 # The solution
 
 There is a great solution available in market even before @tsxp is [Nest.js](https://nestjs.com/), for enterprise application Next.js is really good choice.
-But (there is alway a but for new invention 😃) learning curve for Next.js is massive specially your background is from express.js/react.js.
+But (there is alway a but for new invention 😃) learning curve for Nest.js is massive specially your background is from express.js/react.js.
 
 so i started working on @tsxp
 

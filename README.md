@@ -18,7 +18,7 @@ I have seen lots of backend projects(specially expressjs/nodejs) they start very
 # The solution
 
 There is a great solution available in market even before @tsxp is [Nest.js](https://nestjs.com/), for enterprise application Nest.js is really good choice.
-But (there is alway a but for new invention 😃) learning curve for Nest.js is massive specially your background is from express.js/react.js.
+But (there is a but, there is a innovation 😃) learning curve for Nest.js is massive specially your background is from express.js/react.js.
 
 so i started working on @tsxp
 

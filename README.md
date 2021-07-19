@@ -5,7 +5,7 @@
 <br />
 <br />
 
-TSXP is a Typescript Express.js minimal web framwork with CLI to scaffold project. Write scalable
+TSXP is a Typescript Express.js minimal web framework with CLI to scaffold project. Write scalable
 Backend App with Power of Typescript and Simplicity of Express.js ⚡
 
 </div>

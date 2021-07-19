@@ -13,7 +13,7 @@ Backend App with Power of Typescript and Simplicity of Express.js ⚡
 
 # The problem
 
-I have experience this, maintaning express.js app it quite challenging when you are not solo developer in your team. I've seen people following defferent patters/approch in same express.js project. so we need something which set some boundaries, which push us to write clean and maintainble code and something more than just boilerplate.
+I have experienced this, maintaning express.js app it quite challenging when you are not solo developer in your team. I've seen people following defferent patters/approch in same express.js project. so we need something which set some boundaries, which push us to write clean and maintainble code and something more than just boilerplate.
 
 # The solution
 

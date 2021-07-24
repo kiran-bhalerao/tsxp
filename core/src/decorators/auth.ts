@@ -1,9 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { CustomError } from "../classes/error";
-import { createThrowable } from "../utils/createThrowable";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type U = any;
+import { createSafeNextFN } from "../utils/createSafeNextFN";
+import { Any } from "../utils/types";
 
 interface AuthType<T extends string> {
   role?: T | T[];
@@ -14,9 +12,9 @@ interface AuthType<T extends string> {
   extends?: AuthExtender<T>;
 }
 
-const defaultUserTypeResolver = (req: U) => req.user?.userType;
+const defaultUserTypeResolver = (req: Any) => req.user?.userType;
 const defaultAuthChecker = (
-  req: U,
+  req: Any,
   acceptedRole?: string[],
   currentRole?: string
 ) => {
@@ -59,7 +57,7 @@ const defaultAuthChecker = (
  * @note use before `@Middlewares` decorator so the middlewares will be auth protected
  */
 export function Auth<T extends string>(props?: AuthType<T>) {
-  return (_target: U, _key: string, descriptor: PropertyDescriptor) => {
+  return (_target: Any, _key: string, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
 
     if (typeof originalMethod !== "function") {
@@ -72,7 +70,7 @@ export function Auth<T extends string>(props?: AuthType<T>) {
       next: NextFunction
     ) {
       /** Error handler */
-      const throwable = createThrowable(req, res, next);
+      const withNext = createSafeNextFN(next);
 
       const role = props?.extends?.props?.role || props?.role;
       const error =
@@ -93,9 +91,7 @@ export function Auth<T extends string>(props?: AuthType<T>) {
         return next(new CustomError(error));
       }
 
-      await throwable(
-        async () => await originalMethod.apply(this, [req, res, next])
-      );
+      await withNext(() => originalMethod.apply(this, [req, res, next]));
     };
 
     return descriptor;

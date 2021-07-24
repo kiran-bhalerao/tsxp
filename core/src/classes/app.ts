@@ -7,10 +7,8 @@ import express, {
 import "express-async-errors";
 import { Controller, isInstanceOfController } from "../decorators/controller";
 import { defaultErrorHandler } from "../utils/defaultErrorHandler";
+import { Any } from "../utils/types";
 import { ClassType, Injector } from "./injector";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type U = any;
 
 interface AppProps {
   controllers: ClassType<unknown>[];
@@ -67,7 +65,7 @@ interface AppProps {
    * }
    * ```
    */
-  context?: (req: Request) => Promise<Record<string, U>>;
+  context?: (req: Request) => Promise<Record<string, Any>>;
 }
 
 export class App {
@@ -97,7 +95,7 @@ export class App {
     this.assetsPath = assetsPath;
 
     // setup request context
-    this.app.use(async (...args: U[]) => {
+    this.app.use(async (...args: Any[]) => {
       if (context) {
         const ctx = await context(args[0]);
         for (const key in ctx) {

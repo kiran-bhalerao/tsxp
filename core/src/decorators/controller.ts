@@ -1,6 +1,7 @@
 import express, { Request, Router } from "express";
 import { ClassType } from "../classes/injector";
 import { RoutePropType } from "../decorators/route";
+import { Any } from "../utils/types";
 
 export interface Controller {
   readonly path: string;
@@ -10,9 +11,6 @@ export interface Controller {
 type ParamDict = {
   [key: string]: string | number | boolean;
 };
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type U = any;
 
 /** Append slash(/) to the given string, if it doesn't have */
 function appendSlash(str = "") {
@@ -99,7 +97,7 @@ function withSlash(input: string | RegExp) {
   return input;
 }
 
-export function isInstanceOfController(instance: U): instance is Controller {
+export function isInstanceOfController(instance: Any): instance is Controller {
   return (
     typeof instance.path === "string" &&
     !!instance.router &&
@@ -108,7 +106,7 @@ export function isInstanceOfController(instance: U): instance is Controller {
 }
 
 export function Controller(path = "") {
-  return function <T extends ClassType<U>>(Target: T) {
+  return function <T extends ClassType<Any>>(Target: T) {
     // Here `implements Controller` is redundant b'cuz of the typescript issue as mention bellow
     // https://github.com/microsoft/TypeScript/issues/4881 😔
     // class extends Target implements Controller {
@@ -117,7 +115,7 @@ export function Controller(path = "") {
       public readonly path = path;
       public readonly router: Router;
 
-      constructor(...args: U[]) {
+      constructor(...args: Any[]) {
         super(...args);
         Object.setPrototypeOf(this, Target.prototype);
 

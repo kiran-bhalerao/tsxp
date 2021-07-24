@@ -1,4 +1,5 @@
 import { IRouterMatcher } from "express";
+import { Any } from "../utils/types";
 
 export type PathParams = Parameters<IRouterMatcher<unknown>>[0];
 
@@ -7,12 +8,9 @@ export interface RoutePropType {
   METHOD: "get" | "post" | "put" | "delete";
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type U = any;
-
 function Route(props: Required<RoutePropType>) {
   return function (
-    target: U,
+    target: Any,
     methodName: string,
     descriptor: PropertyDescriptor
   ) {
@@ -23,7 +21,7 @@ function Route(props: Required<RoutePropType>) {
       target,
       methodName
     );
-    const args: string[] = paramtypes.map((a: U) => a.name);
+    const args: string[] = paramtypes.map((a: Any) => a.name);
 
     if (args.length !== 2 || args[0] !== "Object" || args[1] !== "Object") {
       throw new Error(`

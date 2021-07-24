@@ -1,8 +1,7 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
-import { createThrowable } from "../utils/createThrowable";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type U = any;
+import { __prod__ } from "../utils/constants";
+import { createSafeNextFN } from "../utils/createSafeNextFN";
+import { Any } from "../utils/types";
 
 /**
  * @description
@@ -12,7 +11,7 @@ type U = any;
  * `@Middlewares( logger, handler, .. )`
  */
 export function Middlewares(...handlers: RequestHandler[]) {
-  return (_target: U, _key: string, descriptor: PropertyDescriptor) => {
+  return (_target: Any, _key: string, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
 
     if (typeof originalMethod !== "function") {
@@ -24,30 +23,47 @@ export function Middlewares(...handlers: RequestHandler[]) {
       res: Response,
       next: NextFunction
     ) {
-      /** Store middlewares with configured next function */
-      const table: Record<string, () => unknown> = {};
+      const withNext = createSafeNextFN(next);
 
-      /** Error handler */
-      const throwable = createThrowable(req, res, next);
-
-      /** Create middleware chain */
-      handlers.forEach((fn, i) => {
-        if (handlers[i + 1]) {
-          table[i] = () =>
-            fn(req, res, async () => await throwable(table[i + 1]));
-        } else
-          table[i] = () =>
-            fn(
-              req,
-              res,
-              async () =>
-                await throwable(
-                  async () => await originalMethod.apply(this, [req, res, next])
-                )
+      /**
+       *
+       * @desc If someone pass error object to next function from middleware
+       */
+      function nextArgsWarn(args: Error) {
+        if (args instanceof Error) {
+          if (!__prod__)
+            console.warn(
+              "⚠️  There is no need to pass error to next function, you can directly throw it..."
             );
-      });
 
-      return await throwable(table[0]);
+          throw args;
+        }
+      }
+
+      async function handle(handler: typeof handlers[0], nextFn: () => void) {
+        await withNext(() => {
+          return handler(req, res, (args) => {
+            nextArgsWarn(args);
+            nextFn();
+          });
+        });
+      }
+
+      const chain = async (handler: typeof handlers[0], index = 0) => {
+        const nextIndex = index + 1;
+
+        if (handlers[nextIndex]) {
+          await handle(handler, () => chain(handlers[nextIndex], nextIndex));
+        } else {
+          await handle(handler, () =>
+            withNext(() => originalMethod.apply(this, [req, res, next]))
+          );
+        }
+
+        return;
+      };
+
+      await chain(handlers[0]);
     };
 
     return descriptor;

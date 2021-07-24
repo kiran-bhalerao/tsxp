@@ -5,7 +5,7 @@
 <br />
 <br />
 
-TSXP is a Typescript Express.js minimal web framwork with CLI to scaffold bacis project. Write scalable
+TSXP is a Typescript Express.js minimal web framework with CLI to scaffold project. Write scalable
 Backend App with Power of Typescript and Simplicity of Express.js ⚡
 
 </div>
@@ -13,12 +13,12 @@ Backend App with Power of Typescript and Simplicity of Express.js ⚡
 
 # The problem
 
-I have seen lots of backend projects(specially expressjs/nodejs) they start very well but as they grow and grow maintaining them is quite cumbersome.
+I have experienced this, maintaning express.js app it quite challenging when you are not solo developer in your team. I've seen people following defferent patters/approch in same express.js project. so we need something which set some boundaries, which push us to write clean and maintainble code and something more than just boilerplate.
 
 # The solution
 
 There is a great solution available in market even before @tsxp is [Nest.js](https://nestjs.com/), for enterprise application Nest.js is really good choice.
-But (there is alway a but for new invention 😃) learning curve for Nest.js is massive specially your background is from express.js/react.js.
+But (there is a but, there is a innovation 😃) learning curve for Nest.js is massive specially your background is from express.js/react.js.
 
 so i started working on @tsxp
 

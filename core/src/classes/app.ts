@@ -156,7 +156,7 @@ export class App {
   }
 
   private assets() {
-    this.app.use(this.mapPath(this.assetsPath), express.static("public"));
+    this.app.use(this.assetsPath, express.static("public"));
   }
 
   public async listen({ silent } = { silent: false }) {

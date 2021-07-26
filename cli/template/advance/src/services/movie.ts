@@ -1,5 +1,5 @@
-import { Movie } from 'src/controllers/home'
 import { MovieModel } from 'src/models/movie'
+import { Movie } from 'src/types/movie'
 
 export class MovieService {
   public getMovie(id: string) {

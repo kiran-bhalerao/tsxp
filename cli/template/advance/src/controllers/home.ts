@@ -1,20 +1,8 @@
 import { Auth, Controller, CustomError, Get, Post } from '@tsxp/core'
 import { Request, Response } from 'express'
+import { FormError } from 'src/helpers/error'
 import { MovieService } from 'src/services/movie'
-
-// you can create custom error handler like this
-// we recommend to put this type of classes in separate folder (ex. errors)
-class MyError extends CustomError.extender<{
-  field: string
-  error: string
-}> {}
-
-// put this also in separate folder (ex. types)
-export interface Movie {
-  name: string
-  year: number
-  isRRated: boolean
-}
+import { Movie } from 'src/types/movie'
 
 @Controller('/home')
 export class Home {
@@ -37,8 +25,8 @@ export class Home {
     const { id } = req.params
 
     const movie = this.movieService.getMovie(id)
-    if(!movie) {
-      throw new CustomError("Movie not found", 404)
+    if (!movie) {
+      throw new CustomError('Movie not found', 404)
     }
 
     return res.send(movie)
@@ -55,12 +43,11 @@ export class Home {
     // data validation
     // |number will convert non number value to NaN, so need to handle this case
     if (isNaN(year) || typeof year !== 'number') {
-      throw new MyError({field: 'year', error: "Invalid Year"})
+      throw new FormError({ field: 'year', error: 'Invalid Year' })
     }
 
     return res.send('🍊')
   }
-
 
   /**
    * @desc Post call & Auth decorator example
@@ -68,8 +55,8 @@ export class Home {
    */
   @Auth()
   @Post('/movie')
-  async createMovie(req: Request<never, never, {movie: Movie}>, res: Response) {
-    const {movie}  = req.body
+  async createMovie(req: Request<never, never, { movie: Movie }>, res: Response) {
+    const { movie } = req.body
 
     const createdMovie = this.movieService.create(movie)
     return res.send(createdMovie)

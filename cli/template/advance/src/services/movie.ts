@@ -1,10 +1,14 @@
+import { Injectable } from '@tsxp/core'
 import { MovieModel } from 'src/models/movie'
 import { Movie } from 'src/types/movie'
 
+@Injectable()
 export class MovieService {
+  constructor(private movieModel: MovieModel) {}
+
   public getMovie(id: string) {
     // query data from DB
-    const movie = MovieModel.find(id)
+    const movie = this.movieModel.find(id)
     // do some extra processing on data
     // ..
 

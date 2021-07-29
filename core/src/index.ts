@@ -2,6 +2,7 @@ import "reflect-metadata";
 
 export { App } from "./classes/app";
 export { CustomError } from "./classes/error";
+export { Injectable } from "./classes/injectable";
 export { ClassType, Injector } from "./classes/injector";
 export { Auth } from "./decorators/auth";
 export { Controller, isInstanceOfController } from "./decorators/controller";

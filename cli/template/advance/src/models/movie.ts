@@ -4,14 +4,15 @@
 // for mongo checkout `Typegoose`
 // for sql checkout `TypeORM`
 
-export const MovieModel = {
+export class MovieModel {
   find(id: string) {
     return {
       id,
       name: 'Avatar',
       year: 2010
     }
-  },
+  }
+
   find_by(year: number) {
     return {
       id: '1',
@@ -20,3 +21,4 @@ export const MovieModel = {
     }
   }
 }
+

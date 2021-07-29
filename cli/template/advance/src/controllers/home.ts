@@ -1,8 +1,13 @@
-import { Auth, Controller, CustomError, Get, Post } from '@tsxp/core'
-import { Request, Response } from 'express'
+import { Auth, Controller, CustomError, Get, Middlewares, Post } from '@tsxp/core'
+import { NextFunction, Request, Response } from 'express'
 import { FormError } from 'src/helpers/error'
 import { MovieService } from 'src/services/movie'
 import { Movie } from 'src/types/movie'
+
+async function log(_req: Request, _res: Response, next: NextFunction) {
+  console.log('::: inside log')
+  next()
+}
 
 @Controller('/home')
 export class Home {
@@ -21,6 +26,7 @@ export class Home {
    * @url /home/movies/1997
    */
   @Get('/movie/:id')
+  @Middlewares(log)
   async getMovie(req: Request<{ id: string }>, res: Response) {
     const { id } = req.params
 

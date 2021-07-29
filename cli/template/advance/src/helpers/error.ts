@@ -6,4 +6,3 @@ export class FormError extends CustomError.extender<IFormError> {}
 export class NotFoundError extends CustomError.extender {
   statusCode = 404
 }
-

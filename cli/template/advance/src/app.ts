@@ -6,5 +6,8 @@ import { Home } from 'src/controllers/home'
 export const { app, listen } = new App({
   prefix: '/api',
   middlewares: [json(), urlencoded({ extended: true })],
-  controllers: [Home, Admin]
+  controllers: [Home, Admin],
+  // if you dont wanna do "Auth with context option", remove 👇
+  // or you can hover over it to see docs
+  context(req) {}
 })

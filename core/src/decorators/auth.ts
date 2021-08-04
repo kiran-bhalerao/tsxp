@@ -85,10 +85,10 @@ export function Auth<T extends string>(props?: AuthType<T>) {
         const roles = [role].flat();
 
         if (!authChecker(req, roles, currentUserType)) {
-          return next(new CustomError(error));
+          return next(new CustomError(error, 401));
         }
       } else if (!authChecker(req)) {
-        return next(new CustomError(error));
+        return next(new CustomError(error, 401));
       }
 
       await withNext(() => originalMethod.apply(this, [req, res, next]));
@@ -98,7 +98,7 @@ export function Auth<T extends string>(props?: AuthType<T>) {
   };
 }
 
-abstract class AuthExtender<T extends string> {
+abstract class AuthExtender<T extends string = string> {
   /** `userTypeResolver(req: Request): string | undefined` */
   public userTypeResolver(req: Request) {
     return defaultUserTypeResolver(req);
@@ -136,7 +136,7 @@ abstract class AuthExtender<T extends string> {
     };
   }
 
-  constructor(public props?: { role: T | T[]; error?: string }) {}
+  constructor(public props?: { role?: T | T[]; error?: string }) {}
 }
 
 Auth.extender = AuthExtender;

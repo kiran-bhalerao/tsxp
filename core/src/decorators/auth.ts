@@ -12,7 +12,10 @@ interface AuthType<T extends string> {
   extends?: AuthExtender<T>;
 }
 
-const defaultUserTypeResolver = (req: Any) => req.user?.userType;
+const defaultUserTypeResolver = (req: Any): string | undefined => {
+  return req.user?.userType;
+};
+
 const defaultAuthChecker = (
   req: Any,
   acceptedRole?: string[],
@@ -69,8 +72,7 @@ export function Auth<T extends string>(props?: AuthType<T>) {
       res: Response,
       next: NextFunction
     ) {
-      /** Error handler */
-      const withNext = createSafeNextFN(next);
+      const safeNext = createSafeNextFN(next);
 
       const role = props?.extends?.props?.role || props?.role;
       const error =
@@ -91,7 +93,7 @@ export function Auth<T extends string>(props?: AuthType<T>) {
         return next(new CustomError(error, 401));
       }
 
-      await withNext(() => originalMethod.apply(this, [req, res, next]));
+      await safeNext(() => originalMethod.apply(this, [req, res, next]));
     };
 
     return descriptor;
@@ -99,12 +101,30 @@ export function Auth<T extends string>(props?: AuthType<T>) {
 }
 
 abstract class AuthExtender<T extends string = string> {
-  /** `userTypeResolver(req: Request): string | undefined` */
+  /**
+   * @params req: Request
+   * @returns string | undefined
+   * @example
+   * ```
+   * userTypeResolver(req: Request) {
+   *  return req.user?.userType
+   * }
+   * ```
+   */
   public userTypeResolver(req: Request) {
     return defaultUserTypeResolver(req);
   }
 
-  /** `authChecker(req: Request, acceptedRole: string[], currentRole?: string | undefined): boolean` */
+  /**
+   * @params req: Request, acceptedRole?: string[], currentRole?: string
+   * @returns boolean
+   * @example
+   * ```
+   * authChecker(req: Request, acceptedRole?: string[], currentRole?: string) {
+   *  ...
+   * }
+   * ```
+   */
   public authChecker(
     req: Request,
     acceptedRole?: string[],
@@ -139,4 +159,22 @@ abstract class AuthExtender<T extends string = string> {
   constructor(public props?: { role?: T | T[]; error?: string }) {}
 }
 
+/**
+ * @description extend capabilities of Auth decorator
+ * @example
+ * ```
+ * // without Generics
+ * class MyAuth extends Auth.extender {
+ *  // can override authChecker() or userTypeResolver()
+ * }
+ *
+ * // with Generics
+ * class AnotherAuth extends Auth.extender<'USER' | 'ADMIN'> {
+ *  // same
+ * }
+ *
+ * // custom decorator example
+ * const AdminOnly = new AnotherAuth({role: 'ADMIN'}).createDecorator()
+ * ```
+ */
 Auth.extender = AuthExtender;

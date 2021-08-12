@@ -1,15 +1,15 @@
 import { NextFunction, Request, Response } from "express";
-import { CustomError } from "../classes/error";
+import { CustomError, isInstanceofCustomError } from "../classes/error";
 import { createSafeNextFN } from "../utils/createSafeNextFN";
 import { Any } from "../utils/types";
 
-interface AuthType<T extends string> {
+interface AuthType<T extends string, K extends Any = string> {
   role?: T | T[];
-  error?: string;
+  error?: string | CustomError | K;
   /**
    * @desc checkout Auth.extender abstract class
    */
-  extends?: AuthExtender<T>;
+  extends?: AuthExtender<T, K>;
 }
 
 const defaultUserTypeResolver = (req: Any): string | undefined => {
@@ -59,7 +59,9 @@ const defaultAuthChecker = (
  * @note Method must be async route handler
  * @note use before `@Middlewares` decorator so the middlewares will be auth protected
  */
-export function Auth<T extends string>(props?: AuthType<T>) {
+export function Auth<T extends string, K extends Any = string>(
+  props?: AuthType<T, K>
+) {
   return (_target: Any, _key: string, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
 
@@ -74,9 +76,9 @@ export function Auth<T extends string>(props?: AuthType<T>) {
     ) {
       const safeNext = createSafeNextFN(next);
 
-      const role = props?.extends?.props?.role || props?.role;
+      const role = props?.role || props?.extends?.props?.role;
       const error =
-        props?.extends?.props?.error || props?.error || "Invalid Permissions";
+        props?.error || props?.extends?.props?.error || "Invalid Permissions";
       const userTypeResolver =
         props?.extends?.userTypeResolver || defaultUserTypeResolver;
       const authChecker = props?.extends?.authChecker || defaultAuthChecker;
@@ -87,9 +89,17 @@ export function Auth<T extends string>(props?: AuthType<T>) {
         const roles = [role].flat();
 
         if (!authChecker(req, roles, currentUserType)) {
+          if (isInstanceofCustomError<Any>(error)) {
+            return next(error);
+          }
+
           return next(new CustomError(error, 401));
         }
       } else if (!authChecker(req)) {
+        if (isInstanceofCustomError<Any>(error)) {
+          return next(error);
+        }
+
         return next(new CustomError(error, 401));
       }
 
@@ -100,7 +110,7 @@ export function Auth<T extends string>(props?: AuthType<T>) {
   };
 }
 
-abstract class AuthExtender<T extends string = string> {
+abstract class AuthExtender<T extends string = string, K extends Any = string> {
   /**
    * @params req: Request
    * @returns string | undefined
@@ -151,12 +161,14 @@ abstract class AuthExtender<T extends string = string> {
    * ```
    */
   public createDecorator() {
-    return (props?: Omit<AuthType<T>, "extends">) => {
-      return Auth<T>({ ...props, extends: this });
+    return (props?: Omit<AuthType<T, K>, "extends">) => {
+      return Auth<T, K>({ ...props, extends: this });
     };
   }
 
-  constructor(public props?: { role?: T | T[]; error?: string }) {}
+  constructor(
+    public props?: { role?: T | T[]; error?: string | CustomError | K }
+  ) {}
 }
 
 /**

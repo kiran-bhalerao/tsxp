@@ -1,3 +1,5 @@
+import { Any } from "../utils/types";
+
 export abstract class ErrorExtender<T = string> extends Error {
   statusCode: number;
   errors: T[];
@@ -41,4 +43,10 @@ export class CustomError extends ErrorExtender {
    * ```
    */
   static extender = ErrorExtender;
+}
+
+export function isInstanceofCustomError<T = ErrorExtender>(
+  error: Any
+): error is T {
+  return error instanceof ErrorExtender;
 }

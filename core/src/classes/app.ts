@@ -6,7 +6,10 @@ import express, {
 } from "express";
 import "express-async-errors";
 import { Controller, isInstanceOfController } from "../decorators/controller";
-import { defaultErrorHandler } from "../utils/defaultErrorHandler";
+import {
+  createErrorHandler,
+  ErrorHandlerOptions,
+} from "../utils/defaultErrorHandler";
 import { Any } from "../utils/types";
 import { ClassType, Injector } from "./injector";
 
@@ -46,7 +49,7 @@ interface AppProps {
    *
    * https://gist.github.com/CallbacKiran/bb0e70855480c4f90d22bc774d13ce97
    */
-  errorHandler?: ErrorRequestHandler;
+  errorHandler?: ErrorHandlerOptions | ErrorRequestHandler;
   /**
    *
    * tl;dr `@Auth` decorator needs user object in req.  so just return { user: {...} } object from context
@@ -81,7 +84,7 @@ export class App {
       middlewares = [],
       prefix = "",
       assetsPath = "",
-      errorHandler = defaultErrorHandler,
+      errorHandler,
       context,
     } = props;
 
@@ -110,7 +113,11 @@ export class App {
     this.routes(props.controllers);
 
     /** Error handler middleware */
-    this.app.use(errorHandler);
+    if (typeof errorHandler === "function") {
+      this.app.use(errorHandler);
+    } else {
+      this.app.use(createErrorHandler(errorHandler));
+    }
 
     /** Bind Listen method */
     this.listen = this.listen.bind(this);

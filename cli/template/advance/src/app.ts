@@ -8,6 +8,6 @@ export const { app, listen } = new App({
   middlewares: [json(), urlencoded({ extended: true })],
   controllers: [Home, Admin],
   // if you dont wanna do "Auth with context option", remove 👇
-  // or you can hover over it to see docs
-  context(req) {}
+  // or you can uncomment the below line and hover over it to see docs
+  // context(req) {}
 })

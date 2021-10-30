@@ -72,12 +72,12 @@ interface AppProps {
 }
 
 export class App {
-  public app: Application;
+  public app: Omit<Application, "use">;
 
+  private _app: Application;
   private port: number;
   private prefix: string;
   private assetsPath: string;
-  private _controllers: AppProps["controllers"];
 
   constructor(props: AppProps) {
     const {
@@ -93,14 +93,16 @@ export class App {
       throw new Error("Invalid PORT env 🔴");
     }
 
-    this.app = express();
+    const app = express();
+    this.app = app;
+    this._app = app;
+
     this.port = Number(port);
     this.prefix = prefix;
     this.assetsPath = assetsPath;
-    this._controllers = props.controllers;
 
     // setup request context
-    this.app.use(async (...args: Any[]) => {
+    this._app.use(async (...args: Any[]) => {
       if (context) {
         const ctx = await context(args[0]);
         for (const key in ctx) {
@@ -112,12 +114,13 @@ export class App {
 
     this.middlewares(middlewares);
     this.assets();
+    this.routes(props.controllers);
 
     /** Error handler middleware */
     if (typeof errorHandler === "function") {
-      this.app.use(errorHandler);
+      this._app.use(errorHandler);
     } else {
-      this.app.use(createErrorHandler(errorHandler));
+      this._app.use(createErrorHandler(errorHandler));
     }
 
     /** Bind Listen method */
@@ -136,7 +139,7 @@ export class App {
 
   private middlewares(middlewares: RequestHandler[]) {
     middlewares.forEach((middleWare: RequestHandler) =>
-      this.app.use(middleWare)
+      this._app.use(middleWare)
     );
   }
 
@@ -146,7 +149,7 @@ export class App {
       controller = Injector.resolve(controller);
 
       if (isInstanceOfController(controller)) {
-        this.app.use(this.mapPath(controller.path), controller.router);
+        this._app.use(this.mapPath(controller.path), controller.router);
       } else {
         if (controller instanceof Object) {
           throw new Error(
@@ -164,13 +167,10 @@ export class App {
   }
 
   private assets() {
-    this.app.use(this.assetsPath, express.static("public"));
+    this._app.use(this.assetsPath, express.static("public"));
   }
 
   public async listen({ silent } = { silent: false }) {
-    // attach routes just before server listen
-    this.routes(this._controllers);
-
     await new Promise<void>((res) => this.app.listen(this.port, res));
     if (!silent) {
       console.log(`\n🚀 Ready at http://localhost:${this.port} \n`);

@@ -5,7 +5,7 @@
 <br />
 <br />
 
-TSXP is a Typescript Express.js minimal web framework with CLI to scaffold project. Write scalable
+TSXP is a Typescript Express.js minimal web framework with CLI to scaffold projects. Write scalable
 Backend App with Power of Typescript and Simplicity of Express.js ⚡
 
 </div>
@@ -13,18 +13,18 @@ Backend App with Power of Typescript and Simplicity of Express.js ⚡
 
 # Problem
 
-I have experienced this, maintaning express.js app it quite challenging when you are not solo developer in your team. I've seen people following defferent patters/approch in same express.js project. so we need something which set some boundaries, which push us to write clean and maintainble code and something more than just boilerplate.
+I have experienced this maintaining express.js app is quite challenging when you are not a solo developer in your team. I've seen people following different patterns/approaches in the same express.js project. So, we need something which sets some boundaries, which pushes us to write clean and maintainable code, and something more than just boilerplate.
 
 # Solution
 
-There is a great solution available in market even before @tsxp is [Nest.js](https://nestjs.com/), for enterprise application Nest.js is really good choice.
-But (there is a but, there is a innovation 😃) learning curve for Nest.js is massive specially your background is from Express.js/React.js.
+There is a great solution available in the community even before @tsxp is [Nest.js](https://nestjs.com/). For enterprise applications, Nest.js is a really good choice.
+But (there is a but, there is an innovation 😃) the learning curve for Nest.js is massive.
 
-I wanted something as simpler as Express.js so i started working on @tsxp.
+I wanted something as simpler as Express.js. So I started working on @tsxp.
 
 # Suggestion
 
-@tsxp is a fun project. it is still in beta, it is still evolving. if you think you need something more stable i'll recommend you to go with [Nest.js](https://nestjs.com/). Nest.js has a great community support & experienced maintainers.
+@tsxp is a fun project. It is still in beta and still evolving. If you think you need something more stable, I'll recommend you to go with [Nest.js](https://nestjs.com/). Nest.js has great community support & experienced maintainers.
 
 # Install
 

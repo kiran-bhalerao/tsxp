@@ -77,6 +77,7 @@ export class App {
   private port: number;
   private prefix: string;
   private assetsPath: string;
+  private _controllers: AppProps["controllers"];
 
   constructor(props: AppProps) {
     const {
@@ -96,6 +97,7 @@ export class App {
     this.port = Number(port);
     this.prefix = prefix;
     this.assetsPath = assetsPath;
+    this._controllers = props.controllers;
 
     // setup request context
     this.app.use(async (...args: Any[]) => {
@@ -110,7 +112,6 @@ export class App {
 
     this.middlewares(middlewares);
     this.assets();
-    this.routes(props.controllers);
 
     /** Error handler middleware */
     if (typeof errorHandler === "function") {
@@ -167,8 +168,10 @@ export class App {
   }
 
   public async listen({ silent } = { silent: false }) {
-    await new Promise<void>((res) => this.app.listen(this.port, res));
+    // attach routes just before server listen
+    this.routes(this._controllers);
 
+    await new Promise<void>((res) => this.app.listen(this.port, res));
     if (!silent) {
       console.log(`\n🚀 Ready at http://localhost:${this.port} \n`);
     }

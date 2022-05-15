@@ -21,73 +21,6 @@ function appendSlash(str = "") {
   return str;
 }
 
-const supportedPipes = ["|number", "|string", "|boolean"] as const;
-type PipeType = typeof supportedPipes[number];
-
-// "/a/:num|number" here outcome will be /a/:num
-function removeParamPipes(path: string | RegExp) {
-  if (typeof path === "string") {
-    supportedPipes.forEach((pipe) => {
-      if (typeof path === "string") {
-        path = path.replace(pipe, "");
-      }
-    });
-  }
-
-  return path;
-}
-
-function detectTypeWithPipe(path: string | RegExp) {
-  const params: { param: string; typ: PipeType }[] = [];
-
-  if (typeof path === "string") {
-    path
-      .split("/")
-      .filter((p) => p[0] === ":")
-      .map((p) => {
-        const paraT = p.split("|");
-
-        if (paraT.length === 2) {
-          let pipe = paraT[1];
-          const typ = `|${pipe}` as PipeType;
-
-          if (supportedPipes.includes(typ)) {
-            params.push({
-              param: paraT[0].slice(1),
-              typ,
-            });
-          }
-        }
-      });
-
-    path = removeParamPipes(path);
-
-    if (params.length > 0) {
-      return { path, params };
-    }
-
-    return null;
-  }
-
-  return null;
-}
-
-function convertParamTypeWithSupportedPipes(
-  param: ParamDict[keyof ParamDict],
-  typ: PipeType
-) {
-  switch (typ) {
-    case "|string":
-      return String(param);
-    case "|number":
-      return Number(param);
-    case "|boolean":
-      return param === "true";
-    default:
-      return param;
-  }
-}
-
 /** check if given input is string or RegExp, if it's string then pass it to appendSlash*/
 function withSlash(input: string | RegExp) {
   if (typeof input === "string") {
@@ -144,29 +77,12 @@ export function Controller(path = "") {
 
           // check for slash(/)
           let path: any = option["PATH"];
-          const oldPath = [path].flat().map(withSlash);
-
-          path = [...oldPath].map(removeParamPipes);
+          path = [path].flat().map(withSlash);
 
           // call the get, post ... of Express Router with `path` and `handler`
           this.router[option["METHOD"]](
             path,
             (req: Request<ParamDict>, res, next) => {
-              // make typed params
-              oldPath
-                .map(detectTypeWithPipe)
-                .filter(Boolean)
-                .forEach((pt) => {
-                  pt?.params.forEach(({ param, typ }) => {
-                    if (req.params[param]) {
-                      req.params[param] = convertParamTypeWithSupportedPipes(
-                        req.params[param],
-                        typ
-                      );
-                    }
-                  });
-                });
-
               return handler.call(this, req, res, next);
             }
           );

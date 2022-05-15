@@ -1,3 +1,4 @@
+import cleanStack from "clean-stacktrace";
 import { NextFunction, Request, Response } from "express";
 import { isInstanceofCustomError } from "../classes/error";
 
@@ -34,7 +35,7 @@ export function createErrorHandler(options?: ErrorHandlerOptions) {
   const onError =
     options?.onError ||
     function (err) {
-      console.error(err);
+      console.error(cleanStack(err.stack || err.message || ""));
     };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

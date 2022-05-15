@@ -5,26 +5,29 @@
 <br />
 <br />
 
-TSXP is a Typescript Express.js minimal web framework with CLI to scaffold projects. Write scalable
-Backend App with Power of Typescript and Simplicity of Express.js ⚡
+Welcome to TSXP, a utility library built on top of Express.js with Typescript. Create a scalable backend app using Typescript's power and Express.js's simplicity⚡
 
+</div>
+<div align="center">
+  
+[Docs](https://tsxp.gitbook.io/docs/)
+  
 </div>
 <br />
 
-# Problem
+# What problems does this library solve?
 
-I have experienced this maintaining express.js app is quite challenging when you are not a solo developer in your team. I've seen people following different patterns/approaches in the same express.js project. So, we need something which sets some boundaries, which pushes us to write clean and maintainable code, and something more than just boilerplate.
+I have experienced this, maintaning express.js app is quite challenging when you are not the solo developer in your team. I've seen people following different patterns/approaches in the same express.js project. So we need something which sets some boundaries, which pushes us to write clean and maintainable code and something more than just boilerplate.
 
-# Solution
+# Is there any alternate solution before this?
 
-There is a great solution available in the community even before @tsxp is [Nest.js](https://nestjs.com/). For enterprise applications, Nest.js is a really good choice.
-But (there is a but, there is an innovation 😃) the learning curve for Nest.js is massive.
+Yes, there is a great solution available in the community even before @tsxp and that is [Nest.js](https://nestjs.com/). For enterprise applications, Nest.js is a really good choice. However, the learning curve for Nest.js is steep, particularly if you come from Express.js or React.js.
 
-I wanted something as simpler as Express.js. So I started working on @tsxp.
+I wanted something as simple as Express.js, so I started working on @tsxp.
 
-# Suggestion
+# POV of the author?
 
-@tsxp is a fun project. It is still in beta and still evolving. If you think you need something more stable, I'll recommend you to go with [Nest.js](https://nestjs.com/). Nest.js has great community support & experienced maintainers.
+This is a fun project. It is still in beta and still evolving. If you think you need something more stable, I'd recommend you go with [Nest.js](https://nestjs.com/). Nest.js has great community support and experienced maintainers.
 
 # Install
 

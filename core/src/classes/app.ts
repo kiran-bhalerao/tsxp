@@ -120,7 +120,6 @@ export class App {
     if (typeof errorHandler === "function") {
       this._app.use(errorHandler);
     } else {
-      console.log("==== here");
       this._app.use(createErrorHandler(errorHandler));
     }
 

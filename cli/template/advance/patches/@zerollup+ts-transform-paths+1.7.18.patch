@@ -1,0 +1,15 @@
+diff --git a/node_modules/@zerollup/ts-transform-paths/dist/index.js b/node_modules/@zerollup/ts-transform-paths/dist/index.js
+index e9da4bd..555f4af 100644
+--- a/node_modules/@zerollup/ts-transform-paths/dist/index.js
++++ b/node_modules/@zerollup/ts-transform-paths/dist/index.js
+@@ -169,7 +169,9 @@ function importPathVisitor(node, _a) {
+         newNode.flags = node.flags;
+     }
+     if (ts.isImportDeclaration(node)) {
+-        newNode = ts.updateImportDeclaration(node, node.decorators, node.modifiers, node.importClause, newSpec);
++        var importNode = ts.updateImportDeclaration(node, node.decorators, node.modifiers, node.importClause, newSpec);
++        importNode.moduleSpecifier.parent = node.moduleSpecifier.parent
++        newNode = importNode
+         /**
+          * Without this hack ts generates bad import of pure interface in output js,
+          * this causes warning "module has no exports" in bundlers.

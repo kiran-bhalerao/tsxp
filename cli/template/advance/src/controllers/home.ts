@@ -1,6 +1,5 @@
 import { Auth, Controller, CustomError, Get, Middlewares, Post } from '@tsxp/core'
 import { NextFunction, Request, Response } from 'express'
-import { FormError } from 'src/helpers/error'
 import { MovieService } from 'src/services/movie'
 import { Movie } from 'src/types/movie'
 
@@ -38,22 +37,6 @@ export class Home {
     return res.send(movie)
   }
 
-  /**
-   * @desc Pipe params & custom error handling example
-   * @url /home/movies/1997/r-rated/false
-   */
-  @Get('/movies/:year|number/r-rated/:isRate|boolean')
-  async getMoviesByYear(req: Request<{ year: number; isRate: boolean }>, res: Response) {
-    const { year } = req.params
-
-    // data validation
-    // |number will convert non number value to NaN, so need to handle this case
-    if (isNaN(year) || typeof year !== 'number') {
-      throw new FormError({ field: 'year', error: 'Invalid Year' })
-    }
-
-    return res.send('🍊')
-  }
 
   /**
    * @desc Post call & Auth decorator example

@@ -1,36 +1,31 @@
 {
   "name": "@tsxp/cli",
-  "version": "0.0.31",
+  "version": "0.0.32",
   "author": "Kiran bhalerao",
   "bin": {
     "cli": "./bin/run"
   },
-  "bugs": "https://github.com/CallbacKiran/tsxp/issues",
-  "scripts": {
-    "prepack": "rm -rf lib && tsc -b && mv ../README.md .",
-    "postpublish": "mv ./README.md ../",
-    "upgrade:deps": "npx npm-check-updates -i"
-  },
+  "bugs": "https://github.com/kiran-bhalerao/tsxp/issues",
   "dependencies": {
     "@oclif/command": "^1",
     "@oclif/config": "^1",
-    "@oclif/plugin-help": "^6",
-    "chalk": "^5.3.0",
-    "enquirer": "^2.4.1",
-    "execa": "^8.0.1",
-    "fs-extra": "^11.2.0",
-    "ora": "^7.0.1",
-    "tslib": "^2",
-    "ts-node": "^10",
-    "typescript": "^5.3"
+    "@oclif/plugin-help": "^3",
+    "chalk": "^4.1.1",
+    "enquirer": "^2.3.6",
+    "execa": "^5.1.1",
+    "fs-extra": "^10.0.0",
+    "ora": "^5.4.1",
+    "tslib": "^1",
+    "ts-node": "^8",
+    "typescript": "^3.3"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1",
-    "@types/fs-extra": "^11.0.4",
-    "@types/node": "^20.10.0",
-    "eslint": "^8.54",
-    "eslint-config-oclif": "^5.0",
-    "eslint-config-oclif-typescript": "^3.0"
+    "@types/fs-extra": "^9.0.11",
+    "@types/node": "^14.14.7",
+    "eslint": "^5.13",
+    "eslint-config-oclif": "^3.1",
+    "eslint-config-oclif-typescript": "^0.1"
   },
   "engines": {
     "node": ">=8.0.0"
@@ -47,5 +42,9 @@
     "/template"
   ],
   "repository": "kiran-bhalerao/tsxp",
+  "scripts": {
+    "prepack": "rm -rf lib && tsc -b && mv ../README.md .",
+    "postpublish": "mv ./README.md ../"
+  },
   "types": "lib/index.d.ts"
 }
